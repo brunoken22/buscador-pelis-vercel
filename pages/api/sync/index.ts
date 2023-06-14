@@ -32,7 +32,7 @@ export default methods({
                   };
                });
                const respuestaAlgolia = await index.saveObjects(object);
-               console.log(respuestaAlgolia);
+               // console.log(respuestaAlgolia);
 
                fetchNextPage();
             },
@@ -42,10 +42,10 @@ export default methods({
                   return;
                }
                console.log("Termino");
+               res.send("TERMINADO");
             }
          );
 
-      res.send("TERMINADO");
       // const listasFinales = lista.slice(finalOffset, finalOffset + finalLimit);
    },
 });
