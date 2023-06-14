@@ -7,22 +7,7 @@ import { base } from "lib/airtable";
 import { off } from "process";
 
 export default methods({
-   post(req: NextApiRequest, res: NextApiResponse) {
-      // const { finalLimit, finalOffset } = getOffsetAndLimitFomReq(req, 100, 3);
-      // const objetoPrueba = {
-      //    name: "bruno",
-      //    edad: "25",
-      //    objectID: "1",
-      // };
-      // index
-      //    .saveObjects([objetoPrueba])
-      //    .then((res) => {
-      //       console.log("Conectado correctamente" + res);
-      //    })
-      //    .catch((e) => {
-      //       console.log("Error");
-      //    });
-
+   async post(req: NextApiRequest, res: NextApiResponse) {
       base("Furniture")
          .select({
             pageSize: 10,
