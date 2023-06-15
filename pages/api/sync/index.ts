@@ -31,7 +31,7 @@ export default methods({
                      ...r.fields,
                   };
                });
-               const respuestaAlgolia = await index.saveObjects(object);
+               await index.saveObjects(object);
                // console.log(respuestaAlgolia);
 
                fetchNextPage();
@@ -41,7 +41,6 @@ export default methods({
                   console.error(err);
                   return;
                }
-               console.log("Termino");
                res.send("TERMINADO");
             }
          );
