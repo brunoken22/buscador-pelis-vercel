@@ -1,38 +1,46 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getOffsetAndLimitFomReq } from "lib/requests";
+import methods from "micro-method-router";
 import { index } from "lib/algolia";
 import { base } from "lib/airtable";
+export default methods({
+   async get(req: NextApiRequest, res: NextApiResponse) {
+      const { finalLimit, finalOffset } = getOffsetAndLimitFomReq(req);
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
-   const { finalLimit, finalOffset } = getOffsetAndLimitFomReq(req, 100, 3);
+      const respuestaAlgolia = await index.search(req.query.q as string, {
+         hitsPerPage: finalLimit,
+         page: finalOffset > 1 ? Math.floor(finalOffset / finalLimit) : 0,
+      });
 
-   const respuestaAlgolia = await index.search(req.query.search as string, {
-      hitsPerPage: finalLimit,
-      offset: finalOffset,
-   });
-   console.log(respuestaAlgolia.hits);
-   const prueba = respuestaAlgolia.hits.map((r) => r["Name"]);
-   console.log(prueba);
+      const results = respuestaAlgolia.hits.map((r) => (r as any).Name);
+      res.send({
+         results,
+         pagination: {
+            limit: finalLimit,
+            offset: finalOffset,
+            total: respuestaAlgolia.nbHits,
+         },
+      });
+   },
+});
 
-   res.send(respuestaAlgolia["hits"]);
-   // base("Furniture")
-   //    .select({})
-   //    .firstPage(function (err, records) {
-   //       if (err) {
-   //          console.error(err);
-   //          return;
-   //       }
-   //       // records.forEach(function(record) {
-   //       //     console.log('Retrieved', record.get('Name'));
-   //       // });
-   //       res.send({
-   //          results: records.map((item) => item.fields),
-   //          pagination: {
-   //             offset: finalOffset,
-   //             limit: finalLimit,
-   //             // total: lista.length,
-   //          },
-   //       });
-   //    });
-   // const listasFinales = lista.slice(finalOffset, finalOffset + finalLimit);
-}
+// base("Furniture")
+//    .select({})
+//    .firstPage(function (err, records) {
+//       if (err) {
+//          console.error(err);
+//          return;
+//       }
+//       // records.forEach(function(record) {
+//       //     console.log('Retrieved', record.get('Name'));
+//       // });
+//       res.send({
+//          results: records.map((item) => item.fields),
+//          pagination: {
+//             offset: finalOffset,
+//             limit: finalLimit,
+//             // total: lista.length,
+//          },
+//       });
+//    });
+// const listasFinales = lista.slice(finalOffset, finalOffset + finalLimit);
