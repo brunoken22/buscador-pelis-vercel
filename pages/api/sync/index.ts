@@ -4,7 +4,6 @@ import methods from "micro-method-router";
 
 import { index } from "lib/algolia";
 import { base } from "lib/airtable";
-import { off } from "process";
 
 export default methods({
    async post(req: NextApiRequest, res: NextApiResponse) {
