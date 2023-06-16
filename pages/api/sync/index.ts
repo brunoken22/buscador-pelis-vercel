@@ -6,7 +6,7 @@ import { index } from "lib/algolia";
 import { base } from "lib/airtable";
 
 export default methods({
-   async post(req: NextApiRequest, res: NextApiResponse) {
+   async get(req: NextApiRequest, res: NextApiResponse) {
       base("Furniture")
          .select({
             pageSize: 10,
